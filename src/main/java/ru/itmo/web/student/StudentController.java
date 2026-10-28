@@ -1,5 +1,4 @@
 package ru.itmo.web.student;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,43 +8,35 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
-
-@Tag(name = "Студенты", description = "Управление студентами")
+@Tag(name = "студенты", description = "управление студентами")
 @SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
-
     private final StudentService service;
-
     public StudentController(StudentService service) {
         this.service = service;
     }
-
-    @Operation(summary = "Получить всех студентов")
+    @Operation(summary = "получить всех студентов")
     @GetMapping
     public List<StudentResponseDto> getAll() {
         return service.getAll();
     }
-
-    @Operation(summary = "Получить студента по id")
+    @Operation(summary = "получить студента по id")
     @GetMapping("/{id}")
     public StudentResponseDto getById(@PathVariable Long id) {
         return service.getById(id);
     }
-
-    @Operation(summary = "Создать студента (ADMIN)")
+    @Operation(summary = "создать студента (ADMIN)")
     @PostMapping
     public ResponseEntity<StudentResponseDto> create(
             @Valid @RequestBody StudentRequestDto dto
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
-
-    @Operation(summary = "Полностью заменить студента (ADMIN)")
+    @Operation(summary = "полностью заменить студента (ADMIN)")
     @PutMapping("/{id}")
     public StudentResponseDto update(
             @PathVariable Long id,
@@ -53,8 +44,7 @@ public class StudentController {
     ) {
         return service.update(id, dto);
     }
-
-    @Operation(summary = "Частично изменить студента (ADMIN)")
+    @Operation(summary = "частично изменить студента (ADMIN)")
     @PatchMapping("/{id}")
     public StudentResponseDto patch(
             @PathVariable Long id,
@@ -62,15 +52,13 @@ public class StudentController {
     ) {
         return service.patch(id, dto);
     }
-
-    @Operation(summary = "Удалить студента (ADMIN)")
+    @Operation(summary = "удалить студента (ADMIN)")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-    @Operation(summary = "Поиск, фильтры, сортировка и пагинация")
+    @Operation(summary = "поиск, фильтры, сортировка и пагинация")
     @GetMapping("/search")
     public Page<StudentResponseDto> search(
             @RequestParam(required = false) String fullName,

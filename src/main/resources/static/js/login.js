@@ -1,18 +1,14 @@
-// Контракт AuthController: POST /api/auth/login и /api/auth/register.
 const LOGIN_PATH = '/login';
 const REGISTER_PATH = '/register';
 const LOGIN_FIELD = 'username';
-
 async function authRequest(path, body) {
     try {
         const response = await fetch(`${AUTH_URL}${path}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
-        });
-
+        })
         const data = await response.json().catch(() => null);
-
         if (!response.ok) {
             const message = data?.error?.message
                 || data?.message
@@ -21,7 +17,6 @@ async function authRequest(path, body) {
             error.details = data?.error?.details || null;
             throw error;
         }
-
         return data;
     } catch (error) {
         if (error instanceof TypeError) {
@@ -30,19 +25,16 @@ async function authRequest(path, body) {
         throw error;
     }
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
     const title = document.getElementById('authTitle');
     const box = document.getElementById('authMessage');
-
     function showMessage(text, isError = false) {
         box.textContent = text;
         box.classList.toggle('message-error', isError);
         box.hidden = !text;
     }
-
     function formatError(error) {
         const parts = [error.message];
         if (error.details) {
@@ -50,49 +42,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return parts.join('\n');
     }
-
     function showMode(mode) {
         loginForm.style.display = mode === 'login' ? '' : 'none';
         registerForm.style.display = mode === 'register' ? '' : 'none';
         title.textContent = mode === 'login' ? 'Вход' : 'Регистрация';
         showMessage('');
     }
-
     showMode('login');
-
     document.getElementById('showRegister')
         .addEventListener('click', () => showMode('register'));
     document.getElementById('showLogin')
         .addEventListener('click', () => showMode('login'));
-
     loginForm.addEventListener('submit', async event => {
         event.preventDefault();
         showMessage('Вход...');
-
         try {
             const data = await authRequest(LOGIN_PATH, {
                 [LOGIN_FIELD]: document.getElementById('loginUsername').value.trim(),
                 password: document.getElementById('loginPassword').value
             });
-
             saveTokens(data);
             window.location.href = 'index.html';
         } catch (error) {
             showMessage(formatError(error), true);
         }
     });
-
     registerForm.addEventListener('submit', async event => {
         event.preventDefault();
         showMessage('Регистрация...');
-
         try {
             const data = await authRequest(REGISTER_PATH, {
                 username: document.getElementById('regUsername').value.trim(),
                 email: document.getElementById('regEmail').value.trim(),
                 password: document.getElementById('regPassword').value
             });
-
             saveTokens(data);
             window.location.href = 'index.html';
         } catch (error) {

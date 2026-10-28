@@ -1,7 +1,5 @@
 package ru.itmo.web.student;
-
 import java.time.LocalDate;
-
 public record StudentResponseDto(
         Long id,
         String fullName,
@@ -13,7 +11,7 @@ public record StudentResponseDto(
         Boolean isForeigner,
         String notes
 ) {
-    // Превращает сущность Student (из базы) в ответ для клиента
+    // Превращает сущность Student в ответ для клиента
     public static StudentResponseDto from(Student student) {
         return new StudentResponseDto(
                 student.getId(),

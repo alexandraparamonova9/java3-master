@@ -1,5 +1,4 @@
 package ru.itmo.web.student;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,10 +18,8 @@ import ru.itmo.web.security.JwtAuthFilter;
 import ru.itmo.web.security.JwtService;
 import ru.itmo.web.user.Role;
 import ru.itmo.web.user.User;
-
 import java.time.LocalDate;
 import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,7 +34,6 @@ class StudentControllerTest {
     @MockBean private StudentService students;
     @MockBean private AuthService auth;
     @MockBean private CustomUserDetailsService users;
-
     private String bearer(Role role) {
         String username = role.name().toLowerCase();
         UserDetails details = org.springframework.security.core.userdetails.User
@@ -45,7 +41,6 @@ class StudentControllerTest {
         when(users.loadUserByUsername(username)).thenReturn(details);
         return "Bearer " + jwt.generateAccessToken(new User(username, username + "@example.com", "unused", role));
     }
-
     @Test
     void idePreviewCanSendJsonAndBearerPreflight() throws Exception {
         for (String origin : List.of("http://localhost:63342", "http://127.0.0.1:63342")) {
@@ -60,7 +55,6 @@ class StudentControllerTest {
         }
         verifyNoInteractions(students);
     }
-
     @Test
     void corsDoesNotGrantOtherWebsitesAccess() throws Exception {
         mvc.perform(options("/api/auth/login")
@@ -71,7 +65,6 @@ class StudentControllerTest {
                 .andExpect(header().doesNotExist("Access-Control-Allow-Origin"));
         verifyNoInteractions(auth);
     }
-
     @Test
     void idePreviewStillRequiresAuthenticationAndAdminRole() throws Exception {
         String origin = "http://localhost:63342";
@@ -84,14 +77,12 @@ class StudentControllerTest {
                 .andExpect(header().string("Access-Control-Allow-Origin", origin));
         verifyNoInteractions(students);
     }
-
     @Test
     void anonymousRequestsReturn401() throws Exception {
         mvc.perform(get("/api/students")).andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error.status").value(401));
         verifyNoInteractions(students);
     }
-
     @Test
     void userCanReadButCannotModifyStudents() throws Exception {
         String token = bearer(Role.USER);
