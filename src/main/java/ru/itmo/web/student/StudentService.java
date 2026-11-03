@@ -132,7 +132,7 @@ public class StudentService {
         student.setNotes(dto.notes());
     }
     // Проверить, что такого ИСУ ID нет у другого студента
-    private void checkUniqueIsu(String isuId, Long currentId) {
+    private void checkUniqueIsu(Integer isuId, Long currentId) {
         Optional<Student> existing = repository.findByIsuId(isuId);
         if (existing.isPresent() && !existing.get().getId().equals(currentId)) {
             log.warn("Дубликат ИСУ ID: {}", isuId);

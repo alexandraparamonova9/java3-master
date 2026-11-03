@@ -41,7 +41,6 @@ public class UserService {
                 encodedPassword,
                 Role.USER
         );
-
         return userRepository.save(user);
     }
     @Transactional(readOnly = true)

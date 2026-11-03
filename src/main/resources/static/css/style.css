@@ -421,7 +421,8 @@ button {
     white-space: pre-line;
 }
 
-.message[hidden] {
+.message[hidden],
+.button-add[hidden] {
     display: none;
 }
 

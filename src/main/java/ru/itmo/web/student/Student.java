@@ -13,9 +13,9 @@ public class Student {
     @Column(nullable = false)
     private String groupName;
     @Column(nullable = false, unique = true)
-    private String isuId;
+    private Integer isuId;
     private Integer dormNumber;
-    private String room;
+    private Integer room;
     private LocalDate moveInDate;
     private Boolean isForeigner;
     @Column(length = 2000)
@@ -40,10 +40,10 @@ public class Student {
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
-    public String getIsuId() {
+    public Integer getIsuId() {
         return isuId;
     }
-    public void setIsuId(String isuId) {
+    public void setIsuId(Integer isuId) {
         this.isuId = isuId;
     }
     public Integer getDormNumber() {
@@ -52,10 +52,10 @@ public class Student {
     public void setDormNumber(Integer dormNumber) {
         this.dormNumber = dormNumber;
     }
-    public String getRoom() {
+    public Integer getRoom() {
         return room;
     }
-    public void setRoom(String room) {
+    public void setRoom(Integer room) {
         this.room = room;
     }
     public LocalDate getMoveInDate() {

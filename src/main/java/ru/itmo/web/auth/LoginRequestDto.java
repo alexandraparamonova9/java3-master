@@ -5,6 +5,5 @@ public record LoginRequestDto(
         String username,
         @NotBlank(message = "лароль не может быть пустым")
         String password
-
 ) {
 }

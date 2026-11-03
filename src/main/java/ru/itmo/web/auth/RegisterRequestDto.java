@@ -14,6 +14,5 @@ public record RegisterRequestDto(
         @Size(min = 8,
                 message = "пароль должен содержать минимум 8 символов")
         String password
-
 ) {
 }

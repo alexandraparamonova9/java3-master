@@ -4,9 +4,9 @@ public record StudentResponseDto(
         Long id,
         String fullName,
         String groupName,
-        String isuId,
+        Integer isuId,
         Integer dormNumber,
-        String room,
+        Integer room,
         LocalDate moveInDate,
         Boolean isForeigner,
         String notes

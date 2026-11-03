@@ -5,30 +5,31 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+
 public record StudentRequestDto(
         @NotBlank(message = "ФИО не может быть пустым")
-        @Pattern(regexp = "^\\D*$", message = "ФИО не должно содержать цифры")
+        @Pattern(regexp = "^\\D*$",
+                message = "ФИО не должно содержать цифры")
         String fullName,
-        @NotBlank(message = "группа обязательна")
+        @NotBlank(message = "Группа обязательна")
         @Pattern(regexp = "^\\p{L}\\d{4}$",
-                message = "группа должна иметь формат: 1 буква + 4 цифры")
+                message = "Группа должна иметь формат: 1 буква + 4 цифры")
         String groupName,
-        @NotBlank(message = "ИСУ ID обязателен")
-        @Pattern(regexp = "^[1-9]\\d*$",
-                message = "ИСУ ID должен быть положительным целым числом")
-        String isuId,
-        @NotNull(message = "номер общежития обязателен")
-        @Positive(message = "номер общежития должен быть положительным")
+        @NotNull(message = "ИСУ ID обязателен")
+        @Positive(message = "ИСУ ID должен быть положительным")
+        Integer isuId,
+        @NotNull(message = "Номер общежития обязателен")
+        @Positive(message = "Номер общежития должен быть положительным")
         Integer dormNumber,
-        @NotBlank(message = "номер комнаты обязателен")
-        @Pattern(regexp = "^[1-9]\\d*$",
-                message = "номер комнаты должен быть положительным целым числом")
-        String room,
-        @NotNull(message = "дата заселения обязательна")
+        @NotNull(message = "Номер комнаты обязателен")
+        @Positive(message = "Номер комнаты должен быть положительным")
+        Integer room,
+        @NotNull(message = "Дата заселения обязательна")
         LocalDate moveInDate,
-        @NotNull(message = "поле должно иметь значение true или false")
+        @NotNull(message = "Поле должно иметь значение true или false")
         Boolean isForeigner,
-        @Size(max = 2000, message = "заметки не длиннее 2000 символов")
+        @Size(max = 2000, message = "Заметки не длиннее 2000 символов")
         String notes
+
 ) {
 }

@@ -12,12 +12,12 @@ public record StudentPatchRequestDto(
                 message = "группа должна иметь формат: 1 буква + 4 цифры")
         String groupName,
         @Null(message = "это поле является идентификатором и не может быть изменено")
-        String isuId,
+        Integer isuId,
         @Positive(message = "номер общежития должен быть положительным")
         Integer dormNumber,
         @Pattern(regexp = "^[1-9]\\d*$",
                 message = "номер комнаты должен быть положительным целым числом")
-        String room,
+        Integer room,
         LocalDate moveInDate,
         Boolean isForeigner,
         @Size(max = 2000, message = "заметки не длиннее 2000 символов")
