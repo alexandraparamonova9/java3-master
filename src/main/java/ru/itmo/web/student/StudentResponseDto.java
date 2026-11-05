@@ -11,7 +11,6 @@ public record StudentResponseDto(
         Boolean isForeigner,
         String notes
 ) {
-    // Превращает сущность Student в ответ для клиента
     public static StudentResponseDto from(Student student) {
         return new StudentResponseDto(
                 student.getId(),

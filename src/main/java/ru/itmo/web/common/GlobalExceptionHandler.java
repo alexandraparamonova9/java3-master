@@ -20,27 +20,23 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-    // 404: студент не найден
     @ExceptionHandler(StudentNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleNotFound(
             StudentNotFoundException ex, HttpServletRequest request) {
         return build(HttpStatus.NOT_FOUND, ex.getMessage(), null, request);
     }
-    // 409: дубликат ИСУ ID (ошибка покажется под полем ИСУ ID)
     @ExceptionHandler(DuplicateStudentException.class)
     public ResponseEntity<ErrorResponseDto> handleDuplicate(
             DuplicateStudentException ex, HttpServletRequest request) {
         return build(HttpStatus.CONFLICT, "студент не сохранён",
                 Map.of("isuId", ex.getMessage()), request);
     }
-    // 409: нарушено ограничение базы
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponseDto> handleDataIntegrity(
             DataIntegrityViolationException ex, HttpServletRequest request) {
         return build(HttpStatus.CONFLICT,
                 "данные нарушают ограничения базы (возможно, дубликат)", null, request);
     }
-    // 400: не прошла валидация (@Valid)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDto> handleValidation(
             MethodArgumentNotValidException ex, HttpServletRequest request) {
@@ -49,21 +45,18 @@ public class GlobalExceptionHandler {
                 .forEach(e -> details.putIfAbsent(e.getField(), e.getDefaultMessage()));
         return build(HttpStatus.BAD_REQUEST, "ошибка валидации", details, request);
     }
-    // 400: неверный JSON, дата или неизвестное поле
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponseDto> handleBadJson(
             HttpMessageNotReadableException ex, HttpServletRequest request) {
         return build(HttpStatus.BAD_REQUEST,
                 "некорректное тело запроса (проверьте формат JSON и значения полей)", null, request);
     }
-    // 400: неверный тип параметра (например, id=abc)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponseDto> handleTypeMismatch(
             MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
         return build(HttpStatus.BAD_REQUEST,
                 "Неверное значение параметра: " + ex.getName(), null, request);
     }
-    // 400: неверные параметры сортировки и пагинации
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponseDto> handleIllegalArgument(
             IllegalArgumentException ex, HttpServletRequest request) {
@@ -76,7 +69,6 @@ public class GlobalExceptionHandler {
         String message = ex.getReason() != null ? ex.getReason() : status.getReasonPhrase();
         return build(status, message, null, request);
     }
-    // 500: всё остальное
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleOther(
             Exception ex, HttpServletRequest request) {
@@ -89,7 +81,6 @@ public class GlobalExceptionHandler {
         log.error("Необработанная ошибка: {}", request.getRequestURI(), ex);
         return build(HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера", null, request);
     }
-    // Собирает ответ об ошибке в формате, который ждёт фронтенд
     private ResponseEntity<ErrorResponseDto> build(
             HttpStatus status, String message, Map<String, String> details,
             HttpServletRequest request) {

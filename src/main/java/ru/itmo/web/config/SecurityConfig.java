@@ -91,7 +91,6 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-    // Ошибка безопасности в том же формате, что и остальные ошибки API
     private static void writeError(HttpServletResponse response, int status, String message)
             throws IOException {
         response.setStatus(status);

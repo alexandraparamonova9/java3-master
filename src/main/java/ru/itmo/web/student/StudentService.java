@@ -12,36 +12,34 @@ import java.util.Optional;
 
 @Service
 public class StudentService {
-    private static final Logger log = LoggerFactory.getLogger(StudentService.class);
+    private static final Logger log=LoggerFactory.getLogger(StudentService.class);
     private final StudentRepository repository;
     public StudentService(StudentRepository repository) {
         this.repository = repository;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly=true)
     public List<StudentResponseDto> getAll() {
         return repository.findAll().stream()
                 .map(StudentResponseDto::from)
                 .toList();
     }
-    @Transactional(readOnly = true)
+    @Transactional(readOnly=true)
     public StudentResponseDto getById(Long id) {
         return StudentResponseDto.from(findStudent(id));
     }
-
     @Transactional
     public StudentResponseDto create(StudentRequestDto dto) {
         checkUniqueIsu(dto.isuId(), null);
-        Student student = new Student();
+        Student student=new Student();
         copyFields(dto, student);
-        Student saved = repository.saveAndFlush(student);
+        Student saved=repository.saveAndFlush(student);
         log.info("Создан студент id={}, isuId={}", saved.getId(), saved.getIsuId());
         return StudentResponseDto.from(saved);
     }
-
     @Transactional
     public StudentResponseDto update(Long id, StudentRequestDto dto) {
-        Student student = findStudent(id);
+        Student student=findStudent(id);
         if (!student.getIsuId().equals(dto.isuId())) {
             throw new IllegalArgumentException("ИСУ ID является идентификатором и не может быть изменён");
         }
@@ -54,7 +52,6 @@ public class StudentService {
     @Transactional
     public StudentResponseDto patch(Long id, StudentPatchRequestDto dto) {
         Student student = findStudent(id);
-        // Меняем только те поля, которые пришли (не null)
         if (dto.fullName() != null)    student.setFullName(dto.fullName().trim());
         if (dto.groupName() != null)   student.setGroupName(dto.groupName().trim());
         if (dto.dormNumber() != null)  student.setDormNumber(dto.dormNumber());
@@ -86,7 +83,6 @@ public class StudentService {
             String sortBy,
             String direction
     ) {
-        // сортировать по этим полям
         List<String> allowed = List.of(
                 "id", "fullName", "groupName", "isuId",
                 "dormNumber", "room", "moveInDate"
@@ -112,7 +108,6 @@ public class StudentService {
                 pageable
         ).map(StudentResponseDto::from);
     }
-    // Найти студента или выбросить ошибку 404
     private Student findStudent(Long id) {
         Optional<Student> found = repository.findById(id);
         if (found.isEmpty()) {
@@ -131,7 +126,6 @@ public class StudentService {
         student.setForeigner(dto.isForeigner());
         student.setNotes(dto.notes());
     }
-    // Проверить, что такого ИСУ ID нет у другого студента
     private void checkUniqueIsu(Integer isuId, Long currentId) {
         Optional<Student> existing = repository.findByIsuId(isuId);
         if (existing.isPresent() && !existing.get().getId().equals(currentId)) {
