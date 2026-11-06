@@ -42,7 +42,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cors = new CorsConfiguration();
         // Локальный предпросмотр JetBrains. Cookies не используются: авторизация через JWT.
-        cors.setAllowedOrigins(List.of("http://localhost:63342", "http://127.0.0.1:63342"));
+        cors.setAllowedOrigins(List.of(
+                "http://localhost:63342",
+                "http://127.0.0.1:63342",
+                "http://localhost:5173",
+                "http://127.0.0.1:5173"
+        ));
         cors.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         cors.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
